@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <div id="room-id"></div>
+    <div id="messages"></div>
+    <form id="message-form">
+        <input type="text" id="message-input" placeholder="Type your message...">
+        <button type="submit">Send</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        
+
+        // Listen for messages sent to the room
+        socket.on('message', message => {
+            const messagesDiv = document.getElementById('messages');
+            const messageP = document.createElement('p');
+            messageP.innerText = message;
+            messagesDiv.appendChild(messageP);
+        });
+
+        // Send a message to the room
+        const messageForm = document.getElementById('message-form');
+        const messageInput = document.getElementById('message-input');
+        messageForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const message = messageInput.value;
+            socket.emit('chatMessage', message);
+            messageInput.value = '';
+        });
+
+        // Display the room ID to the user
+        const roomIdDiv = document.getElementById('room-id');
+        roomIdDiv.innerText = `You are in room ${roomId}`;
+    </script>
+</body>
+</html>
